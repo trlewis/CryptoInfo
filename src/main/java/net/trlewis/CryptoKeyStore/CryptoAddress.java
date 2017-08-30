@@ -1,12 +1,13 @@
 package net.trlewis.CryptoKeyStore;
 
+import net.trlewis.CryptoInfo.CryptocurrencyType;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 public class CryptoAddress implements IDatabaseModel
 {
-    private static final String TABLE_NAME = "CryptoAddresses";
+    public static final String TABLE_NAME = "CryptoAddresses";
 
     public String address;
     public CryptocurrencyType currencyType;
@@ -14,8 +15,7 @@ public class CryptoAddress implements IDatabaseModel
     public String name;
     public int id;
 
-    public CryptoAddress()
-    {}
+    public CryptoAddress() {}
 
     public CryptoAddress(String myAddress, CryptocurrencyType myType, double myQuantity
         , String myName)
@@ -38,7 +38,7 @@ public class CryptoAddress implements IDatabaseModel
     {
         String quantity = Double.toString(this.quantity);
         boolean hasName = name != null && name.trim().length() != 0;
-        String n = hasName ? String.format("'$s'", this.name) :"NULL";
+        String n = hasName ? String.format("'%s'", this.name) :"NULL";
         return String.format("('%1$s', '%2$s', %3$s, %4$s)", this.address
             , this.currencyType.name(), quantity, n);
         //read currencytype back in with CryptocurrencyType.valueOf("foo");
@@ -47,7 +47,7 @@ public class CryptoAddress implements IDatabaseModel
     @Override
     public String getCreateTableString()
     {
-        return "CREATE TABLE IF NOT EXISTS Addresses (\n" +
+        return "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (\n" +
                 " id integer PRIMARY KEY AUTOINCREMENT, \n" +
                 " address varchar(100) NOT NULL, \n" +
                 " currencyType varchar(50) NOT NULL,\n" +
@@ -66,8 +66,7 @@ public class CryptoAddress implements IDatabaseModel
     public String getInsertDescription()
     {
         return String.format("INSERT INTO %1$s (address, currencyType" +
-                        ", quantity, name) VALUES "
-                , TABLE_NAME);
+                        ", quantity, name) VALUES ", TABLE_NAME);
     }
 
     //for "SELECT * FROM Addresses [WHERE ...]" type queries only
