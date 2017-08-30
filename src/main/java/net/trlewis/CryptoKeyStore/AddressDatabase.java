@@ -6,12 +6,14 @@ import java.util.List;
 
 public class AddressDatabase implements AutoCloseable
 {
-    private final String _url;
+//    private final String _url;
     private final Connection _connection;
 
-    public AddressDatabase(String url) throws SQLException {
-        this._url = url;
-        this._connection = DriverManager.getConnection(this._url);
+    public AddressDatabase(Connection connection)
+            throws SQLException {
+//        this._url = url;
+//        this._connection = DriverManager.getConnection(this._url);
+        this._connection = connection;
     }
 
     private void insert(List<? extends IDatabaseModel> models)
@@ -54,13 +56,15 @@ public class AddressDatabase implements AutoCloseable
         }
     }
 
-    private static void createAddressTable(Connection conn) throws SQLException
+    private static void createAddressTable(Connection conn)
+            throws SQLException
     {
         String sql = new CryptoAddress().getCreateTableString();
         executeSqlNonQuery(conn, sql);
     }
 
-    private static void executeSqlNonQuery(Connection conn, String sql) throws SQLException
+    private static void executeSqlNonQuery(Connection conn, String sql)
+            throws SQLException
     {
         Statement statement = conn.createStatement();
         statement.execute(sql);
