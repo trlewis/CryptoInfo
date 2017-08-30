@@ -1,7 +1,8 @@
 package net.trlewis.CryptoInfo;
 
-public enum CryptocurrencyType
+public enum CryptoType
 {
+    BCH, //Bitcoin cash ("bcash")
     BTC, //Bitcoin (core?)
     DASH,
     DOGE, //Dogecoin

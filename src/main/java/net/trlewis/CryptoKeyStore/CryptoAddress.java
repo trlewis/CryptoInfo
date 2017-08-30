@@ -1,33 +1,36 @@
 package net.trlewis.CryptoKeyStore;
 
-import net.trlewis.CryptoInfo.CryptocurrencyType;
+import net.trlewis.CryptoInfo.CryptoType;
+import org.intellij.lang.annotations.Language;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@SuppressWarnings({"SqlNoDataSourceInspection", "SqlDialectInspection"})
 public class CryptoAddress implements IDatabaseModel
 {
     public static final String TABLE_NAME = "CryptoAddresses";
 
     public String address;
-    public CryptocurrencyType currencyType;
-    public double quantity;
-    public String name;
+    public CryptoType currencyType;
+    public BigDecimal quantity;
+    public String label;
     public int id;
 
-    public CryptoAddress() {}
+    CryptoAddress() {}
 
-    public CryptoAddress(String myAddress, CryptocurrencyType myType, double myQuantity
-        , String myName)
+    public CryptoAddress(String myAddress, CryptoType myType
+            , BigDecimal myQuantity, String myName)
     {
         this.address = myAddress;
         this.currencyType = myType;
         this.quantity = myQuantity;
-        this.name = myName;
+        this.label = myName;
     }
 
-    public CryptoAddress(int myId, String myAddress, CryptocurrencyType myType, double myQuantity
-            , String myName)
+    private CryptoAddress(int myId, String myAddress, CryptoType myType
+            , BigDecimal myQuantity, String myName)
     {
         this(myAddress, myType, myQuantity, myName);
         this.id = myId;
@@ -36,55 +39,47 @@ public class CryptoAddress implements IDatabaseModel
     @Override
     public String getInsertValues()
     {
-        String quantity = Double.toString(this.quantity);
-        boolean hasName = name != null && name.trim().length() != 0;
-        String n = hasName ? String.format("'%s'", this.name) :"NULL";
-        return String.format("('%1$s', '%2$s', %3$s, %4$s)", this.address
+        String quantity = this.quantity.toString();
+        boolean hasName = label != null && label.trim().length() != 0;
+        String n = hasName ? String.format("'%s'", this.label) :"NULL";
+        return String.format("('%1$s', '%2$s', '%3$s', %4$s)", this.address
             , this.currencyType.name(), quantity, n);
-        //read currencytype back in with CryptocurrencyType.valueOf("foo");
+        //read currencytype back in with CryptoType.valueOf("foo");
     }
 
     @Override
     public String getCreateTableString()
     {
-        return "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (\n" +
+        @Language("SQL")
+        String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (\n" +
                 " id integer PRIMARY KEY AUTOINCREMENT, \n" +
                 " address varchar(100) NOT NULL, \n" +
                 " currencyType varchar(50) NOT NULL,\n" +
-                " quantity decimal(30,15), \n" +
-                " name varchar(250) \n" +
+                " quantity varchar(250), \n" +
+                " label varchar(50) \n" +
                 ");";
-    }
-
-    @Override
-    public String getTableName()
-    {
-        return TABLE_NAME;
+        return sql;
     }
 
     @Override
     public String getInsertDescription()
     {
-        return String.format("INSERT INTO %1$s (address, currencyType" +
-                        ", quantity, name) VALUES ", TABLE_NAME);
+        @Language("SQL")
+        String sql = "INSERT INTO " + TABLE_NAME 
+                + " (address, currencyType, quantity, label) VALUES ";
+        return sql;
     }
 
     //for "SELECT * FROM Addresses [WHERE ...]" type queries only
-    public static CryptoAddress readSingle(ResultSet rs) throws SQLException
+    static CryptoAddress readSingle(ResultSet rs) throws SQLException
     {
         String addr = rs.getString("address");
-        CryptocurrencyType type = CryptocurrencyType.valueOf(rs.getString("currencyType"));
-        double qty = rs.getDouble("quantity");
-        String n = rs.getString("name");
+        CryptoType type = CryptoType.valueOf(rs.getString("currencyType"));
+        String dbQuantity = rs.getString("quantity");
+        BigDecimal qty = new BigDecimal(dbQuantity);
+        String n = rs.getString("label");
         int i = rs.getInt("id");
 
-        CryptoAddress address = new CryptoAddress(i, addr, type, qty, n);
-//        address.currencyType = type;
-//        address.address = addr;
-//        address.quantity = qty;
-//        address.name = n;
-//        address.id = i;
-
-        return address;
+        return new CryptoAddress(i, addr, type, qty, n);
     }
 }

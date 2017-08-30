@@ -3,6 +3,7 @@ package net.trlewis.CryptoInfo;
 import net.trlewis.CryptoKeyStore.AddressDatabase;
 import net.trlewis.CryptoKeyStore.CryptoAddress;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -16,9 +17,9 @@ public class Main
     public static void main(String[] args)
     {
 //        System.out.println("testing");
-//        IBalanceGetter btcGetter = new BtcBalanceGetter();
-////        double balance = btcGetter.getBalance("17A16QmavnUfCW11DAApiJxp7ARnxN5pGX");
-////        System.out.println(balance);
+//        IBalanceGetter btcGetter = new BlockChainInfoBtcBalanceGetter();
+//        BigDecimal balance = btcGetter.getBalance("17A16QmavnUfCW11DAApiJxp7ARnxN5pGX");
+//        System.out.println(balance);
 //
 //        List<String> addresses = new ArrayList<String>();
 //        addresses.add("17A16QmavnUfCW11DAApiJxp7ARnxN5pGX");
@@ -43,9 +44,19 @@ public class Main
 //            String insertVals = addr.getInsertValues();
 //            System.out.println(insertVals);
 //        }
+
+        createSampleDatabase();
+
         List<CryptoAddress> addresses = readSampleDatabase();
         for(CryptoAddress addr : addresses)
             System.out.println(addr.getInsertValues());
+
+//        for(CryptoAddress addr : getSampleAddresses())
+//        {
+//            String s = String.format("'%1$s", addr.quantity);
+//            System.out.println(s);
+//            System.out.println(addr.quantity.toString());
+//        }
     }
 
     private static void createSampleDatabase()
@@ -82,17 +93,16 @@ public class Main
             throws SQLException
     {
         String databaseLoc = "jdbc:sqlite:./test.db";
-        Connection connection = DriverManager.getConnection(databaseLoc);
-        return connection;
+        return DriverManager.getConnection(databaseLoc);
     }
 
     private static List<CryptoAddress> getSampleAddresses()
     {
         List<CryptoAddress> addresses = new ArrayList<>();
-        addresses.add(new CryptoAddress("1BTCsdofin32g", CryptocurrencyType.BTC
-            , 1.123456789, "testName"));
-        addresses.add(new CryptoAddress("1BTCsdofin32gsdf", CryptocurrencyType.ETH
-                , 31.56789, "testEther"));
+        addresses.add(new CryptoAddress("1BTCsdofin32g", CryptoType.BTC
+            , new BigDecimal("1234567890.12345678900987654321"), "testName"));
+        addresses.add(new CryptoAddress("1BTCsdofin32gsdf", CryptoType.ETH
+                , new BigDecimal(31.458585), "testEther"));
         return addresses;
     }
 

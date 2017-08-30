@@ -10,9 +10,9 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class GetRequestHelper
+class GetRequestHelper
 {
-    public static JsonObject getJsonFromGetRequest(String getQuery)
+    static JsonObject getJsonFromGetRequest(String getQuery)
     {
         try
         {

@@ -4,15 +4,13 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("SqlNoDataSourceInspection")
 public class AddressDatabase implements AutoCloseable
 {
-//    private final String _url;
     private final Connection _connection;
 
     public AddressDatabase(Connection connection)
             throws SQLException {
-//        this._url = url;
-//        this._connection = DriverManager.getConnection(this._url);
         this._connection = connection;
     }
 
@@ -66,14 +64,12 @@ public class AddressDatabase implements AutoCloseable
 
     public void createTables()
     {
-//        try(Connection conn = DriverManager.getConnection(url))
-//        {
         try
         {
             if(this._connection != null)
             {
 //                DatabaseMetaData meta = this._connection.getMetaData();
-//                System.out.println("driver name: " + meta.getDriverName());
+//                System.out.println("driver label: " + meta.getDriverName());
 //                System.out.println("new database has been created: " + meta.getURL());
 
                 this.createAddressTable();
