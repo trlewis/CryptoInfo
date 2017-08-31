@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class BlockChainInfoBitcoinBalanceGetter implements IBalanceGetter
 {
     //TODO: put this elsewhere
@@ -37,7 +38,6 @@ public class BlockChainInfoBitcoinBalanceGetter implements IBalanceGetter
         if(json == null)
             return null;
 
-        //TODO: make sure they're all in the same order as the input addresses.
         JsonArray addrs = json.get("addresses").getAsJsonArray();
         Map<String, BigDecimal> balances = new HashMap<>();
         for(JsonElement elem : addrs)

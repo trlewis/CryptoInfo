@@ -9,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Main
 {
@@ -16,38 +17,17 @@ public class Main
 
     public static void main(String[] args)
     {
-        System.out.println("testing");
 //        IBalanceGetter btcGetter = new BlockCypherBitcoinBalanceGetter();
 //        BigDecimal balance = btcGetter.getBalance("1KdGZGAXK6yrJCSJ5Wrh9BB4SEKarLBq2U");
-//        IBalanceGetter dashGetter = new ExplorerDashBalanceGetter();
-//        BigDecimal balance = dashGetter.getBalance("XqtzDyFAbQdzxdeFfqZFLmurtRY3MjE3w6");
-        IBalanceGetter ltcGetter = new BlockCypherLitecoinBalanceGetter();
-        BigDecimal balance = ltcGetter.getBalance("LdghkKhR4TThb8mKWKNRx3VZ6ZUp3HD89G");
-        System.out.println(balance);
-//
-//        List<String> addresses = new ArrayList<String>();
-//        addresses.add("17A16QmavnUfCW11DAApiJxp7ARnxN5pGX");
-//        addresses.add("197uQksKLvU8pZGWc6mnEoJ5N3BKmjcst1");
-//
-//        Map<String, Double> values = btcGetter.getBalances(addresses);
-//        for(Map.Entry<String, Double> kvp : values.entrySet())
-//        {
-//            System.out.print(kvp.getKey() + " - ");
-//            System.out.println(kvp.getValue());
-//        }
-//        String blah = "blah";
-//        String more = "more";
-//        double d = 123.456781123234982734;
-//        String ds = Double.toString(d);
-//        String str = String.format("addr: %1$s %2$s %1$s %3$s", blah, more, ds);
-//        System.out.println(str);
+//        System.out.println(balance);
 
-//        List<CryptoAddress> addresses = getSampleAddresses();
-//        for(CryptoAddress addr : addresses)
-//        {
-//            String insertVals = addr.getInsertValues();
-//            System.out.println(insertVals);
-//        }
+        List<String> addresses = new ArrayList<>();
+        addresses.add("0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae");
+        addresses.add("0x5eD8Cee6b63b1c6AFce3AD7c92f4fD7E1B8fAd9F");
+        IBalanceGetter ethGetter = new EtherscanIoEtherBalanceGetter();
+        Map<String, BigDecimal> values = ethGetter.getBalances(addresses);
+        for(Map.Entry<String, BigDecimal> kvp : values.entrySet())
+            System.out.println(kvp.getKey() + " : " + kvp.getValue());
 
 //        createSampleDatabase();
 
