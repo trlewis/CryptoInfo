@@ -8,13 +8,13 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BlockChainInfoBtcBalanceGetter implements IBalanceGetter
+public class BlockChainInfoBitcoinBalanceGetter implements IBalanceGetter
 {
     //TODO: put this elsewhere
 //    private static final double SATOSHIS_PER_BITCOIN = 100000000;
     private static final int SATOSHI_DECIMAL_PLACES = 8;
 
-    public BigDecimal getBalance(String address)
+    public BigDecimal getBalance(final String address)
     {
         String loc = String.format("https://blockchain.info/rawaddr/%s?limit=0", address);
         JsonObject json = GetRequestHelper.getJsonFromGetRequest(loc);
@@ -28,7 +28,7 @@ public class BlockChainInfoBtcBalanceGetter implements IBalanceGetter
         return null;
     }
 
-    public Map<String, BigDecimal> getBalances(Iterable<String> addresses)
+    public Map<String, BigDecimal> getBalances(final Iterable<String> addresses)
     {
         String addrParam = String.join("|", addresses);
         String url = String.format("https://blockchain.info/multiaddr?active=%s", addrParam);

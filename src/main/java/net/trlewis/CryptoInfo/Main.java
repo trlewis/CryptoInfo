@@ -16,10 +16,14 @@ public class Main
 
     public static void main(String[] args)
     {
-//        System.out.println("testing");
-//        IBalanceGetter btcGetter = new BlockChainInfoBtcBalanceGetter();
-//        BigDecimal balance = btcGetter.getBalance("17A16QmavnUfCW11DAApiJxp7ARnxN5pGX");
-//        System.out.println(balance);
+        System.out.println("testing");
+//        IBalanceGetter btcGetter = new BlockCypherBitcoinBalanceGetter();
+//        BigDecimal balance = btcGetter.getBalance("1KdGZGAXK6yrJCSJ5Wrh9BB4SEKarLBq2U");
+//        IBalanceGetter dashGetter = new ExplorerDashBalanceGetter();
+//        BigDecimal balance = dashGetter.getBalance("XqtzDyFAbQdzxdeFfqZFLmurtRY3MjE3w6");
+        IBalanceGetter ltcGetter = new BlockCypherLitecoinBalanceGetter();
+        BigDecimal balance = ltcGetter.getBalance("LdghkKhR4TThb8mKWKNRx3VZ6ZUp3HD89G");
+        System.out.println(balance);
 //
 //        List<String> addresses = new ArrayList<String>();
 //        addresses.add("17A16QmavnUfCW11DAApiJxp7ARnxN5pGX");
@@ -45,11 +49,11 @@ public class Main
 //            System.out.println(insertVals);
 //        }
 
-        createSampleDatabase();
+//        createSampleDatabase();
 
-        List<CryptoAddress> addresses = readSampleDatabase();
-        for(CryptoAddress addr : addresses)
-            System.out.println(addr.getInsertValues());
+//        List<CryptoAddress> addresses = readSampleDatabase();
+//        for(CryptoAddress addr : addresses)
+//            System.out.println(addr.getInsertValues());
 
 //        for(CryptoAddress addr : getSampleAddresses())
 //        {
