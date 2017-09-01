@@ -12,6 +12,9 @@ import java.util.Map;
 /**
  * Uses the etherscan.io API to get values. Their site says to not make more than 5
  * requests per second or you'll get a 403 (forbidden) error.
+ *
+ * Now this one is returning "NOTOK" messages...
+ * //TODO: get an API key, keep it in some file that isn't included in this repo.
  */
 public class EtherscanIoEtherBalanceGetter implements IBalanceGetter
 {
@@ -22,7 +25,7 @@ public class EtherscanIoEtherBalanceGetter implements IBalanceGetter
     public @Nullable BigDecimal getBalance(final String address)
     {
         String loc = String.format(
-                "https://api.etherscan.io/api?module=account&action=balance&address=%s"
+                "https://api.etherscan.io/api?module=account&action=balance&_address=%s"
                 , address);
         JsonObject json = GetRequestHelper.getJsonFromGetRequest(loc);
         if(!isValidResponse(json))
@@ -36,7 +39,7 @@ public class EtherscanIoEtherBalanceGetter implements IBalanceGetter
     {
         String param = String.join(",", addresses);
         String loc = String.format(
-                "https://api.etherscan.io/api?module=account&action=balancemulti&address=%s"
+                "https://api.etherscan.io/api?module=account&action=balancemulti&_address=%s"
                 , param);
         JsonObject json = GetRequestHelper.getJsonFromGetRequest(loc);
         if(!isValidResponse(json))

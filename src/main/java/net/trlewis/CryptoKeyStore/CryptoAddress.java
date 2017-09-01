@@ -7,55 +7,78 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * An immutable representation of a particular address of a particular cryptocurrency, with
+ * a particular balance and name.
+ */
 @SuppressWarnings({"SqlNoDataSourceInspection", "SqlDialectInspection"})
 public class CryptoAddress implements IDatabaseModel
 {
     public static final String TABLE_NAME = "CryptoAddresses";
 
-    public String address;
-    public CryptoType currencyType;
-    public BigDecimal quantity;
-    public String label;
-    public int id;
-
-    CryptoAddress() {}
+    private final String _address;
+    private final CryptoType _cryptoType;
+    private final BigDecimal _balance;
+    private final String _label;
+    private int _id;
 
     public CryptoAddress(String myAddress, CryptoType myType
             , BigDecimal myQuantity, String myName)
     {
-        this.address = myAddress;
-        this.currencyType = myType;
-        this.quantity = myQuantity;
-        this.label = myName;
+        this._address = myAddress;
+        this._cryptoType = myType;
+        this._balance = myQuantity;
+        this._label = myName;
     }
 
     private CryptoAddress(int myId, String myAddress, CryptoType myType
             , BigDecimal myQuantity, String myName)
     {
         this(myAddress, myType, myQuantity, myName);
-        this.id = myId;
+        this._id = myId;
     }
+
+    //#region getters
+
+    @SuppressWarnings("unused")
+    public String getAddress() { return this._address; }
+
+    @SuppressWarnings("unused")
+    public CryptoType getCryptoType() { return this._cryptoType; }
+
+    @SuppressWarnings("unused")
+    public BigDecimal getBalance() { return _balance; }
+
+    @SuppressWarnings("unused")
+    public String getLabel() { return this._label; }
+
+    @Override
+    public int getId() { return this._id; }
+
+    //#endregion getters
 
     @Override
     public String getInsertValues()
     {
-        String quantity = this.quantity.toString();
-        boolean hasName = label != null && label.trim().length() != 0;
-        String n = hasName ? String.format("'%s'", this.label) :"NULL";
-        return String.format("('%1$s', '%2$s', '%3$s', %4$s)", this.address
-            , this.currencyType.name(), quantity, n);
+        String quantity = this._balance.toString();
+        boolean hasName = _label != null && _label.trim().length() != 0;
+        String n = hasName ? String.format("'%s'", this._label) :"NULL";
+        return String.format("('%1$s', '%2$s', '%3$s', %4$s)", this._address
+            , this._cryptoType.name(), quantity, n);
         //read currencytype back in with CryptoType.valueOf("foo");
     }
 
     @Override
-    public String getCreateTableString()
+    public String getTableName() { return TABLE_NAME; }
+
+    static String getCreateTableString()
     {
         @Language("SQL")
         String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (\n" +
                 " id integer PRIMARY KEY AUTOINCREMENT, \n" +
                 " address varchar(100) NOT NULL, \n" +
-                " currencyType varchar(50) NOT NULL,\n" +
-                " quantity varchar(250), \n" +
+                " cryptoType varchar(50) NOT NULL,\n" +
+                " balance varchar(250), \n" +
                 " label varchar(50) \n" +
                 ");";
         return sql;
@@ -66,7 +89,7 @@ public class CryptoAddress implements IDatabaseModel
     {
         @Language("SQL")
         String sql = "INSERT INTO " + TABLE_NAME 
-                + " (address, currencyType, quantity, label) VALUES ";
+                + " (address, currencyType, balance, label) VALUES ";
         return sql;
     }
 
@@ -74,8 +97,8 @@ public class CryptoAddress implements IDatabaseModel
     static CryptoAddress readSingle(ResultSet rs) throws SQLException
     {
         String addr = rs.getString("address");
-        CryptoType type = CryptoType.valueOf(rs.getString("currencyType"));
-        String dbQuantity = rs.getString("quantity");
+        CryptoType type = CryptoType.valueOf(rs.getString("cryptoType"));
+        String dbQuantity = rs.getString("balance");
         BigDecimal qty = new BigDecimal(dbQuantity);
         String n = rs.getString("label");
         int i = rs.getInt("id");

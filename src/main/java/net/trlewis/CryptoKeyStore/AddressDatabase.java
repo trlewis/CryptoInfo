@@ -21,17 +21,14 @@ public class AddressDatabase implements AutoCloseable
         final String allSql = "SELECT * FROM " + CryptoAddress.TABLE_NAME;
         List<CryptoAddress> addresses = new ArrayList<>();
 
-        try(Statement s = this._connection.createStatement())
-        {
+        try(Statement s = this._connection.createStatement()) {
             if(s.execute(allSql))
             {
                 ResultSet rs = s.getResultSet();
                 while(rs.next())
                     addresses.add(CryptoAddress.readSingle(rs));
             }
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -40,9 +37,11 @@ public class AddressDatabase implements AutoCloseable
 
     //#endregion SELECT methods
 
+    //#region INSERT methods
+
     public void insert(List<? extends IDatabaseModel> models)
     {
-        if(models.size() == 0)
+        if(0 == models.size())
             return;
 
         String desc = models.get(0).getInsertDescription();
@@ -52,39 +51,34 @@ public class AddressDatabase implements AutoCloseable
         String valStr = String.join(", ", values);
         String sql = desc + valStr;
 
-        try(Statement s = this._connection.createStatement())
-        {
+        try(Statement s = this._connection.createStatement()) {
             s.execute(sql);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             //ignored
         }
     }
 
+    //#endregion INSERT methods
+
+    //#region database creation methods
 
     public void createTables()
+            throws SQLException
     {
-        try
-        {
-            if(this._connection != null)
-            {
-//                DatabaseMetaData meta = this._connection.getMetaData();
-//                System.out.println("driver label: " + meta.getDriverName());
-//                System.out.println("new database has been created: " + meta.getURL());
+        if(null == this._connection)
+            return;
 
-                this.createAddressTable();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        this.createAddressTable();
     }
 
     private void createAddressTable()
             throws SQLException
     {
-        String sql = new CryptoAddress().getCreateTableString();
+        String sql = CryptoAddress.getCreateTableString();
         this.executeSqlNonQuery(sql);
     }
+
+    //#endregion database creation methods
 
     private void executeSqlNonQuery(String sql)
             throws SQLException
@@ -93,7 +87,6 @@ public class AddressDatabase implements AutoCloseable
         statement.execute(sql);
         statement.close();
     }
-
 
     @Override
     public void close() throws Exception

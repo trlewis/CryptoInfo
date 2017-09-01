@@ -44,6 +44,7 @@ public class Main
         addresses.add("0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae");
         addresses.add("0x5eD8Cee6b63b1c6AFce3AD7c92f4fD7E1B8fAd9F");
         IBalanceGetter ethGetter = new EtherscanIoEtherBalanceGetter();
+//        IBalanceGetter ethGetter = new BlockCypherEtherBalanceGetter();
         Map<String, BigDecimal> ethValues = ethGetter.getBalances(addresses);
         BigDecimal ethToUsd = new BigDecimal(values.get(CryptoType.ETH));
         for(Map.Entry<String, BigDecimal> kvp : ethValues.entrySet())
@@ -53,6 +54,8 @@ public class Main
                 , kvp.getValue(), usdVal);
             System.out.println(line);
         }
+//        BigDecimal bal = ethGetter.getBalance(addresses.get(0));
+//        System.out.println(bal);
 
 //        createSampleDatabase();
 
@@ -62,9 +65,9 @@ public class Main
 
 //        for(CryptoAddress addr : getSampleAddresses())
 //        {
-//            String s = String.format("'%1$s", addr.quantity);
+//            String s = String.format("'%1$s", addr._balance);
 //            System.out.println(s);
-//            System.out.println(addr.quantity.toString());
+//            System.out.println(addr._balance.toString());
 //        }
     }
 

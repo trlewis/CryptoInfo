@@ -2,8 +2,9 @@ package net.trlewis.CryptoKeyStore;
 
 public interface IDatabaseModel
 {
-//    String getTableName();
+//    String getCreateTableString();
+    int getId();
     String getInsertDescription();
     String getInsertValues();
-    String getCreateTableString();
+    String getTableName();
 }

@@ -43,7 +43,7 @@ public class BlockChainInfoBitcoinBalanceGetter implements IBalanceGetter
         for(JsonElement elem : addrs)
         {
             JsonObject obj = elem.getAsJsonObject();
-            String thisAddr = obj.get("address").getAsString();
+            String thisAddr = obj.get("_address").getAsString();
             String balStr = obj.get("final_balance").getAsString();
             BigDecimal bal = getValueFromString(balStr);
             balances.put(thisAddr, bal);
